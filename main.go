@@ -13,18 +13,42 @@ import (
 var script string
 
 type Seal struct {
-	Secret string `json: "secret"`
-	Host   string `json: "host`
+	Secret               string `json: "secret"`
+	Host                 string `json: "host"`
+	Namespace            string `json: "Namespace"`
+	Name                 string `json: "Name"`
+	DryRun               bool
+	DescriptionSecret    string
+	DescriptionHost      string
+	DescriptionNamespace string
+	DescriptionName      string
+	DescriptionDryRun    string
 }
 
 func main() {
 	s := new(Seal)
-	flag.StringVar(&s.Secret, "secret", "", "Your passowrd, your token,... that you want to encrypt")
-	flag.StringVar(&s.Host, "host", "", "Base URL of your sealed-secret API .i.e https://seal.apps.elm.sa")
+	s.DescriptionSecret = "Your passowrd, your token,... to be encrypted"
+	s.DescriptionHost = "Base URL of your sealed-secret API .i.e https://seal.apps.elm.sa"
+	s.DescriptionNamespace = "k8s namespace where this secret can be decrypted. " +
+		"If not specified, the scope of sealing will be cluster wide"
+	s.DescriptionName = "k8s secret name where this secret can be decrypted." +
+		"It requires to specify also the namespace of this k8s secret using -namespace option"
+	s.DescriptionDryRun = "dry run - just print the command behind the scenes"
+	flag.StringVar(&s.Secret, "secret", "", s.DescriptionSecret)
+	flag.StringVar(&s.Secret, "s", "", s.DescriptionSecret+" (shorthand)")
+	flag.StringVar(&s.Host, "host", "", s.DescriptionHost)
+	flag.StringVar(&s.Host, "h", "", s.DescriptionHost+" (shorthand)")
+	flag.StringVar(&s.Namespace, "namespace", "", s.DescriptionNamespace)
+	flag.StringVar(&s.Namespace, "n", "", s.DescriptionNamespace+" (shorthand)")
+	flag.StringVar(&s.Name, "name", "", s.DescriptionName)
+	flag.BoolVar(&s.DryRun, "dry-run", false, s.DescriptionDryRun)
 	flag.Parse()
-	runCommand("/bin/sh", "-c", processString(script, &s))
-	fmt.Printf("%+v\n", *s)
-	fmt.Print(*s)
+	scriptProcessed := processString(script, &s)
+	if s.DryRun {
+		fmt.Println(scriptProcessed)
+	} else {
+		runCommand("/bin/sh", "-c", scriptProcessed)
+	}
 
 }
 
@@ -57,6 +81,15 @@ func runCommand(name string, arg ...string) error {
 	return nil
 }
 
+func processString(str string, vars interface{}) string {
+	tmpl, err := template.New("tmpl").Parse(str)
+
+	if err != nil {
+		panic(err)
+	}
+	return process(tmpl, vars)
+}
+
 func process(t *template.Template, vars interface{}) string {
 	var tmplBytes bytes.Buffer
 
@@ -65,13 +98,4 @@ func process(t *template.Template, vars interface{}) string {
 		panic(err)
 	}
 	return tmplBytes.String()
-}
-
-func processString(str string, vars interface{}) string {
-	tmpl, err := template.New("tmpl").Parse(str)
-
-	if err != nil {
-		panic(err)
-	}
-	return process(tmpl, vars)
 }
