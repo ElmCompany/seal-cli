@@ -1,0 +1,24 @@
+{
+  "name": "Your project Dev",
+  "dockerFile": "ide.Dockerfile",
+  "appPort": 8000,
+  "extensions": [
+      "ms-vscode.go",
+      "davidanson.vscode-markdownlint",
+      "shardulm94.trailing-spaces",
+      "IBM.output-colorizer"
+  ],
+  "settings": {
+      "go.useLanguageServer": true
+  },
+  "postCreateCommand": "go mod download",
+  "runArgs": [
+      "-u",
+      "vscode",
+      "--cap-add=SYS_PTRACE",
+      "--security-opt",
+      "seccomp=unconfined",
+      "--net",
+      "nexus_default"
+  ]
+}
