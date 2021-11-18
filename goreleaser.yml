@@ -1,0 +1,130 @@
+project_name: trivy
+builds:
+  -
+    main: main.go
+    binary: seal
+    ldflags:
+      - -s -w
+      - "-extldflags '-static'"
+      - -X main.version={{.Version}}
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+      - freebsd
+      - openbsd
+    goarch:
+      - amd64
+      - 386
+      - arm
+      - arm64
+      - ppc64le
+    goarm:
+      - 7
+    ignore:
+      - goos: darwin
+        goarch: 386
+
+release:
+    extra_files:
+      - glob: ./bom.json
+    discussion_category_name: Announcements
+
+nfpms:
+  -
+    formats:
+      - deb
+      - rpm
+    vendor: "elm"
+    homepage: "https://github.com/elmcompany/seal-cli"
+    maintainer: "Abdennour <github@abdennoor.com>"
+    description: "Elegant wrapper CLI of kubeseal CLI, focusing on RAW secrets"
+    license: "LGPL v3"
+    file_name_template: "{{.ProjectName}}_{{.Version}}_{{.Os}}-{{.Arch}}"
+    replacements:
+      amd64: 64bit
+      386: 32bit
+      arm: ARM
+      arm64: ARM64
+      ppc64le: PPC64LE
+      darwin: macOS
+      linux: Linux
+      openbsd: OpenBSD
+      netbsd: NetBSD
+      freebsd: FreeBSD
+      dragonfly: DragonFlyBSD
+archives:
+  -
+    format: tar.gz
+    name_template: "{{.ProjectName}}_{{.Version}}_{{.Os}}-{{.Arch}}"
+    replacements:
+      amd64: 64bit
+      386: 32bit
+      arm: ARM
+      arm64: ARM64
+      ppc64le: PPC64LE
+      darwin: macOS
+      linux: Linux
+      openbsd: OpenBSD
+      netbsd: NetBSD
+      freebsd: FreeBSD
+      dragonfly: DragonFlyBSD
+    files:
+      - README.md
+      - LICENSE
+
+
+# dockers:
+#   - image_templates:
+#       - "docker.io/elmio/seal:{{ .Version }}-amd64"
+#       - "docker.io/elmio/seal:latest-amd64"
+#       - "ghcr.io/elmio/seal:{{ .Version }}-amd64"
+#       - "ghcr.io/elmio/seal:latest-amd64"
+#       - "public.ecr.aws/elmio/seal:latest-amd64"
+#       - "public.ecr.aws/elmio/seal:{{ .Version }}-amd64"
+#     use_buildx: true
+#     goos: linux
+#     goarch: amd64
+#     ids:
+#       - seal
+#     build_flag_templates:
+#       - "--label=org.label-schema.schema-version=1.0"
+#       - "--label=org.label-schema.name={{ .ProjectName }}"
+#       - "--label=org.label-schema.description=Elegant wrapper CLI of kubeseal CLI, focusing on RAW secrets"
+#       - "--label=org.label-schema.vendor=Elm Company"
+#       - "--label=org.label-schema.version={{ .Version }}"
+#       - "--label=org.label-schema.build-date={{ .Date }}"
+#       - "--label=org.label-schema.vcs=https://github.com/elmcompany/seal"
+#       - "--label=org.label-schema.vcs-ref={{ .FullCommit }}"
+#       - "--platform=linux/amd64"
+#     extra_files:
+#     - contrib/
+#   - image_templates:
+#       - "docker.io/elmio/seal:{{ .Version }}-arm64"
+#       - "docker.io/elmio/seal:latest-arm64"
+#       - "ghcr.io/elmio/seal:{{ .Version }}-arm64"
+#       - "ghcr.io/elmio/seal:latest-arm64"
+#       - "public.ecr.aws/elmio/seal:latest-arm64"
+#       - "public.ecr.aws/elmio/seal:{{ .Version }}-arm64"
+#     use_buildx: true
+#     goos: linux
+#     goarch: arm64
+#     ids:
+#       - seal
+#     build_flag_templates:
+#       - "--label=org.label-schema.schema-version=1.0"
+#       - "--label=org.label-schema.name={{ .ProjectName }}"
+#       - "--label=org.label-schema.description=Elegant wrapper CLI of kubeseal CLI, focusing on RAW secrets"
+#       - "--label=org.label-schema.vendor=Aqua Security"
+#       - "--label=org.label-schema.version={{ .Version }}"
+#       - "--label=org.label-schema.build-date={{ .Date }}"
+#       - "--label=org.label-schema.vcs=https://github.com/elmcompany/seal"
+#       - "--label=org.label-schema.vcs-ref={{ .FullCommit }}"
+#       - "--platform=linux/arm64"
+
+# docker_manifests:
+#   - name_template: 'elmio/seal:{{ .Version }}'
+#     image_templates:
+#     - 'elmio/seal:{{ .Version }}-amd64'
+#     - 'elmio/seal:{{ .Version }}-arm64'
