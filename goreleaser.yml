@@ -1,4 +1,4 @@
-project_name: trivy
+project_name: seal
 builds:
   -
     main: main.go
