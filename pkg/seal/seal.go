@@ -3,12 +3,10 @@ package seal
 import (
 	_ "embed"
 	"flag"
-
-	"git.elm.sa/devops/seal-cli/pkg/utils"
 )
 
 //go:embed files/script.sh
-var script string
+var Script string
 
 type Seal struct {
 	Secret               string `json: "secret"`
@@ -40,8 +38,4 @@ func (s *Seal) Instance() {
 	flag.StringVar(&s.Name, "name", "", s.DescriptionName)
 	flag.BoolVar(&s.DryRun, "dry-run", false, s.DescriptionDryRun)
 	flag.Parse()
-}
-
-func (s *Seal) Script() string {
-	return utils.ProcessString(script, &s)
 }

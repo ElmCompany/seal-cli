@@ -11,7 +11,7 @@ import (
 func main() {
 	s := new(seal.Seal)
 	s.Instance()
-	script := s.Script()
+	script := utils.ProcessString(seal.Script, &s)
 	if s.DryRun {
 		fmt.Println(script)
 	} else {
