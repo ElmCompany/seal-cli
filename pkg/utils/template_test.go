@@ -17,7 +17,7 @@ func TestProcessString(t *testing.T) {
 		want string
 	}{
 		{
-			name: "can interpolate variable",
+			name: "it can interpolate variable",
 			args: args{
 				str: "-namespace {{ .Namespace }}",
 				vars: &seal.Seal{
@@ -27,7 +27,7 @@ func TestProcessString(t *testing.T) {
 			want: "-namespace hello",
 		},
 		{
-			name: "can interpolate control flow",
+			name: "it can interpolate control flow",
 			args: args{
 				str: "{{ if .Namespace }}namespace-wide{{ end }}",
 				vars: &seal.Seal{

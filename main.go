@@ -5,12 +5,21 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	"git.elm.sa/devops/seal-cli/pkg/seal"
 	"git.elm.sa/devops/seal-cli/pkg/utils"
 )
 
+var (
+	version = "dev"
+)
+
 func main() {
+	if strings.Contains(os.Args[1], "version") {
+		fmt.Println(version)
+		return
+	}
 	s, output, err := seal.ParseFlags(os.Args[0], os.Args[1:])
 	if err == flag.ErrHelp {
 		fmt.Println(output)

@@ -22,7 +22,7 @@ type Seal struct {
 	DescriptionName      string
 	DescriptionDryRun    string
 	// args are the positional (non-flag) command-line arguments.
-	args []string
+	Args []string
 }
 
 // Instance - get instance of seal struct from CLI flags
@@ -62,7 +62,7 @@ func ParseFlags(progname string, args []string) (s *Seal, output string, err err
 	if err != nil {
 		return nil, buf.String(), err
 	}
-	s.args = fs.Args()
+	s.Args = fs.Args()
 	return s, buf.String(), nil
 }
 
