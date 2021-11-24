@@ -8,6 +8,7 @@ Latest release:
 
 ## Changelog
 
+* feat: version can be displayed with "version" or "-version" argument
 * refactor: code to meet some standards
 * test: add missing testing and enhance code test coverage.
 * fix: typo in parsing "-namespace" value
