@@ -8,12 +8,18 @@ GOSRC=$(GOPATH)/src
 
 default: build
 
+.PHONY: lint
+lint:
+	golangci-lint run
+
 .PHONY: build
 build:
 	go build $(LDFLAGS) .
 
+.PHONY: test
+test:
+	go test -cover  -v -coverprofile cover.out ./...
+	go tool cover -html=cover.out -o cover.html
 .PHONY: run
 run:
 	go run .
-
-# docs swager gen : https://github.com/mayur-tolexo/demo/blob/master/Makefile
