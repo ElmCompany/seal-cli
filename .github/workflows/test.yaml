@@ -1,0 +1,34 @@
+name: Test
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '*.md'
+      - 'docs/**'
+      - 'ide.Dockerfile'
+      - '.devcontainer.json'
+      - 'LICENSE'
+  pull_request:
+env:
+  GO_VERSION: "1.17"
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: v1.41
+          args: --deadline=30m
+
+      - name: Run unit tests
+        run: make test

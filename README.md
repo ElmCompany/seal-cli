@@ -1,3 +1,7 @@
+
+![Test Status](https://github.com/ElmCompany/seal-cli/actions/workflows/test.yaml/badge.svg)
+[![Latest Release](https://img.shields.io/github/release/ElmCompany/seal-cli.svg)](https://github.com/ElmCompany/seal-cli/releases/latest)
+
 # Overview
 
 This is a wrapper CLI of [kubeseal CLI](https://github.com/bitnami-labs/sealed-secrets/releases), specifically the [raw mode](https://github.com/bitnami-labs/sealed-secrets/tree/7ce55636a2e264239593bc197feaa76c82f35026#raw-mode-experimental).

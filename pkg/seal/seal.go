@@ -11,10 +11,10 @@ import (
 var Script string
 
 type Seal struct {
-	Secret               string `json: "secret"`
-	Host                 string `json: "host"`
-	Namespace            string `json: "Namespace"`
-	Name                 string `json: "Name"`
+	Secret               string
+	Host                 string
+	Namespace            string
+	Name                 string
 	DryRun               bool
 	DescriptionSecret    string
 	DescriptionHost      string
@@ -70,6 +70,9 @@ func (s *Seal) Execute(executor func(n string, args ...string) error, script str
 	if s.DryRun {
 		fmt.Println(script)
 	} else {
-		executor("/bin/sh", "-c", script)
+		err := executor("/bin/sh", "-c", script)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
